@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "685935824072",
+    "project_id": "eraqi-graduation",
+    "storage_bucket": "eraqi-graduation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685935824072:android:72599e9a5334ae024d29fd",
+        "android_client_info": {
+          "package_name": "com.example.eraqi_project_graduation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685935824072-3ppfgpr0e203kbj9r93h5uu47jmeirmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV3_IqvJ4juPZQ97TO2dkFdNK5sIW9hgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "685935824072-3ppfgpr0e203kbj9r93h5uu47jmeirmd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
