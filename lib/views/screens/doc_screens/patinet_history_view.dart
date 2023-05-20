@@ -1,35 +1,28 @@
+
 import 'package:eraqi_project_graduation/models/patient_info.dart';
-import 'package:eraqi_project_graduation/views/screens/chat_screen.dart';
-import 'package:eraqi_project_graduation/views/screens/patients_screens/allergies_scree.dart';
-import 'package:eraqi_project_graduation/views/screens/patients_screens/blood_glu_screen.dart';
-import 'package:eraqi_project_graduation/views/screens/patients_screens/blood_press_screen.dart';
-import 'package:eraqi_project_graduation/views/screens/patients_screens/patient_profile.dart';
-import 'package:eraqi_project_graduation/views/screens/patients_screens/vaccines_screens.dart';
 import 'package:eraqi_project_graduation/views/size_config.dart';
 import 'package:eraqi_project_graduation/views/theme.dart';
-import 'package:eraqi_project_graduation/views/widgets/my_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_jap_icons/medical_icons_icons.dart';
 
-import '../login.dart';
 
-class PatientHistory extends StatefulWidget {
-  const PatientHistory({super.key, required this.uid});
+class PatientHistoryView extends StatefulWidget {
+  const PatientHistoryView({super.key, required this.uid});
   final String uid;
 
   @override
-  State<PatientHistory> createState() => _PatientHistoryState();
+  State<PatientHistoryView> createState() => _PatientHistoryViewState();
 }
 
-class _PatientHistoryState extends State<PatientHistory> {
+class _PatientHistoryViewState extends State<PatientHistoryView> {
+  bool isLoading=false;
   String name = '';
   String id = '';
   String address = '';
   String gender = '';
   String phoneNumber = '';
   String type = '';
-  String docEmail = '';
+  String docEmail= '';
   List<MedicalVisit> medicalHistory = [];
   Map<String, String> glocuse = {};
   Map<String, String> press = {};
@@ -96,6 +89,9 @@ class _PatientHistoryState extends State<PatientHistory> {
   //     .toList();
 
   void getPatientData() async {
+    setState(() {
+  isLoading=true;
+});
     await firestore
         .collection('Patients')
         .doc(widget.uid)
@@ -108,6 +104,9 @@ class _PatientHistoryState extends State<PatientHistory> {
       phoneNumber = q['phoneNumber'];
       type = q['type'];
       // docEmail = q['docEmail'];
+      setState(() {
+  isLoading=false;
+});
     });
 
     // medicalHistory = await getMedicalVisits();
@@ -124,36 +123,12 @@ class _PatientHistoryState extends State<PatientHistory> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      drawer: MyDrawer(
-        routes: {
-          'Medical History': PatientHistory(uid: widget.uid),
-          'Allergy': PatientAllergy(
-            uid: widget.uid,
-          ),
-          'Blood Pressure': PatientBloodPress(uid: widget.uid),
-          'Blood Glucose': PatientBloodGlu(uid: widget.uid),
-          'Vaccines': PatientVaccine(
-            uid: widget.uid,
-          ),
-          'Profile': PatientProfileScreen(uid: widget.uid,nationalId:id),
-          'Log Out': LoginScreen()
-        },
-        icons: const [
-          Icons.history,
-          MedicalIcons.infectious_diseases,
-          MedicalIcons.cardiology,
-          MedicalIcons.diabetes_education,
-          MedicalIcons.administration,
-          Icons.person,
-          Icons.logout
-          //  MedicalIcons.genetics,
-        ],
-      ),
+      
       backgroundColor: bgClr,
       appBar: AppBar(
         backgroundColor: prmClr,
-        title: Text(
-          name.isEmpty ? 'Patient\'s History' : '$name\'s History',
+        title: Text(isLoading?
+           '' : '$name\'s History',
           style: headingStyle,
         ),
       ),
@@ -191,31 +166,9 @@ class _PatientHistoryState extends State<PatientHistory> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Medical Visit',
-                                      style: titleStyle,
-                                    ),
-                                   TextButton(
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(prmClr)
-                                    ),
-                                      onPressed: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ChatScreen(
-                                                patientUid: widget.uid,
-                                                docUid: data['docEmail'] as String,
-                                                isPatient: true),
-                                          )),
-                                      child: Text(
-                                        'Chat',
-                                        style: bodyStyle.copyWith(color: white),
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  'Medical Visit',
+                                  style: titleStyle,
                                 ),
                                 Text(
                                   'Doctor Name: ${data['docname']}',

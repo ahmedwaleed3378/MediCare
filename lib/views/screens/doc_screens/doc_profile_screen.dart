@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 
 import '../../size_config.dart';
 import '../../theme.dart';
-import '../../widgets/my_drawer.dart';
-import 'find_patient_screen.dart';
+
 
 class DocProfileScreen extends StatelessWidget {
-  const DocProfileScreen({super.key});
+  const DocProfileScreen({super.key, required this.name, required this.email, required this.nationalId, required this.address, required this.birthDate, required this.gender, required this.phoneNumber,});
+  final String name;
+  final String email;
+  final String nationalId;
+  final String address;
+  final String birthDate;
+  final String gender;
+  final String phoneNumber;
+
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
-        drawer: const MyDrawer(
-          routes: {
-            'Find Patient': FindPatientScreen(),
-            'Profile': DocProfileScreen()
-          },
-          icons: [Icons.find_in_page,
-           Icons.person],
-        ),
+       
         appBar: AppBar(
           backgroundColor: prmClr,
           title: Text(
@@ -37,10 +37,11 @@ class DocProfileScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Image.asset('assets/Person.png'),
+                  Image.asset('assets/Person.png',width: 50,height: 50,),
                   Text(
-                    'Doctor: Eraqi',
-                    style: titleStyle,
+                    'Doctor\n${name}',
+                    style: titleStyle.copyWith(letterSpacing: 4),
+                    textAlign: TextAlign.center,
                   ),
                   Container(
                     alignment: Alignment.center,
@@ -57,7 +58,9 @@ class DocProfileScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const QrCheckScreen(),
+                              builder: (context) => QrCheckScreen(
+                                id: '${email}',
+                              ),
                             ));
                       },
                     ),
@@ -68,19 +71,18 @@ class DocProfileScreen extends StatelessWidget {
                 height: 20,
               ),
               DefaultTextStyle(
-                  style: body2Style,
-                  overflow: TextOverflow.fade,
+               style: subtitleStyle,
+                    overflow: TextOverflow.fade,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Text('Gender: Male'),
-                      Text('Age: 21'),
-                      Text('Birth Date: 13-10-2000'),
-                      Text('National ID: 215648941871215'),
-                      Text('Email: example@gmail.com'),
-                      Text('Address: Samalut'),
-                      Text('Phone Number: 01094929414'),
+                    children:  [SizedBox(height: SizeConfig.screenHeight*0.07,),
+                      Text('Gender: ${gender}'),SizedBox(height: SizeConfig.screenHeight*0.07,),
+                      Text('Birth Date: ${birthDate}'),SizedBox(height: SizeConfig.screenHeight*0.07,),
+                      Text('National ID: ${nationalId}'),SizedBox(height: SizeConfig.screenHeight*0.07,),
+                      Text('Email: ${email}'),SizedBox(height: SizeConfig.screenHeight*0.07,),
+                      Text('Address: ${address}'),SizedBox(height: SizeConfig.screenHeight*0.07,),
+                      Text('Phone Number: ${phoneNumber}'),
                     ],
                   )),
             ])));

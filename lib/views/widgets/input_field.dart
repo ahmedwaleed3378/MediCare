@@ -23,7 +23,7 @@ class InputField extends StatelessWidget {
       children: [
         Text(
           title,
-          style: titleStyle,
+          style: titleStyle.copyWith(letterSpacing: 2),
         ),
         Container(
           height: 52,

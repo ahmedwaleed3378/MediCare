@@ -47,15 +47,15 @@ class HistoryItem extends StatelessWidget {
               ),
               Text(
                 'Test Name: ${testName}',
-                style: subtitleStyle,
+                style: subtitleStyle,overflow: TextOverflow.clip,
               ),
               Text(
                 'Date & Time: ${dateTime}',
-                style: subtitleStyle,
+                style: subtitleStyle,overflow: TextOverflow.clip,
               ),
               Text(
                 'Notes: ${notes}',
-                style: subtitleStyle,
+                style: subtitleStyle,overflow: TextOverflow.clip,
               ),
             ],
           ),

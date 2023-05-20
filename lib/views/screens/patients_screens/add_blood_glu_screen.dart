@@ -1,53 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eraqi_project_graduation/models/patient_info.dart';
-import 'package:eraqi_project_graduation/views/size_config.dart';
-import 'package:eraqi_project_graduation/views/theme.dart';
+import 'package:eraqi_project_graduation/views/widgets/my_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+
+import '../../size_config.dart';
+import '../../theme.dart';
 import '../../widgets/input_field.dart';
 
-class AddPrescriptionScreen extends StatefulWidget {
-  const AddPrescriptionScreen(
-      {super.key,
-      required this.uid,
-      required this.place,
-      required this.docName, required this.docEmail});
+class AddBloodGlu extends StatefulWidget {
+  const AddBloodGlu({
+    super.key,
+    required this.uid,
+  });
   final String uid;
-  final String place;
-  final String docName;
-  final String docEmail;
   @override
-  State<AddPrescriptionScreen> createState() => _AddPrescriptionScreenState();
+  State<AddBloodGlu> createState() => _AddBloodGluState();
 }
 
-class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
-  DateTime _selectedDate = DateTime.now();
-  TextEditingController diagnosis = TextEditingController();
-  TextEditingController notes = TextEditingController();
-  TextEditingController drug = TextEditingController();
-     String date='';
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  Future<void> _uploadMedicalVisitToFirebase(MedicalVisit visit) async {
+class _AddBloodGluState extends State<AddBloodGlu> {
+  Future<void> uploadAllergy(Glucose glu) async {
     await FirebaseFirestore.instance
-        .collection('Patients/${widget.uid}/medicalvisits')
+        .collection('Patients/${widget.uid}/glucose')
         .doc()
-        .set(visit.toJson());
+        .set(glu.toJson());
   }
+
+  DateTime _selectedDate = DateTime.now();
+
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: prmClr,
-        title: Text(
-          ' Prescription',
-          style: headingStyle,
-        ),
-      ),
-      backgroundColor: bgClr,
+    return MyScaffold(
+      title: 'Blood Glucose',
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(20),
@@ -56,18 +46,8 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
             child: Column(
               children: [
                 InputField(
-                  title: 'Diagnosis',
-                  hint: '',
-                  controller: diagnosis,
-                ),
-                InputField(
-                  title: 'Drug',
-                  hint: '',
-                  controller: drug,
-                ),
-                InputField(
-                  title: 'Notes',
-                  controller: notes,
+                  title: 'Blood Glucose',
+                  controller: textEditingController,
                   hint: '',
                 ),
                 Column(
@@ -83,13 +63,15 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                      
+                        const SizedBox(
+                          width: 25,
+                        ),
                         Text(
                           ' ${DateFormat.yMd().format(_selectedDate)}',
                           style: subtitleStyle,
                         ),
                         SizedBox(
-                          width: SizeConfig.screenWidth * 0.5,
+                          width: SizeConfig.screenWidth * 0.4,
                         ),
                         IconButton(
                           onPressed: () => getDateFromUser(),
@@ -119,22 +101,30 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                           fontSize: 22),
                     )),
                   ),
-                  onTap: ()  {
+                  onTap: () {
+                    //
                     if (_formkey.currentState!.validate()) {
-                        _uploadMedicalVisitToFirebase(MedicalVisit(
-                            drugs: drug.text,
-                            docname: widget.docName,
-                            place: widget.place,
-                            diagnosis: diagnosis.text,
-                            date: date,
-                            docEmail: widget.docEmail,
-                            note: notes.text));
+                      try {
+                        uploadAllergy(Glucose(
+                            glucoseRatio: textEditingController.text,
+                            date: '${DateFormat.yMd().format(_selectedDate)}'));
                         Fluttertoast.showToast(
-                            msg: 'Prescription added successfully',
+                            msg: 'Blood Glucose added successfully',
                             backgroundColor: prmClr,
                             toastLength: Toast.LENGTH_LONG);
                         _formkey.currentState!.reset();
-                   
+                      } catch (e) {
+                        print(e.toString());
+                        Fluttertoast.showToast(
+                            msg: 'Failed to save Blood Glucose ratio',
+                            backgroundColor: prmClr,
+                            toastLength: Toast.LENGTH_LONG);
+                      }
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: 'Please fill the data correctlly',
+                          backgroundColor: prmClr,
+                          toastLength: Toast.LENGTH_LONG);
                     }
                   },
                 )
@@ -150,13 +140,12 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
     DateTime? pickeddate = await showDatePicker(
         context: context,
         initialDate: _selectedDate,
-        firstDate: DateTime(1950),
-        lastDate: DateTime(2024));
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2030));
     pickeddate != null
         ? setState(() {
             _selectedDate = pickeddate;
           })
         : print('It\'s Null');
-       date='${DateFormat.yMd(_selectedDate)}';
   }
 }

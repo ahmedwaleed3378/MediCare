@@ -3,8 +3,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../theme.dart';
 
 class QrCheckScreen extends StatelessWidget {
-  const QrCheckScreen({super.key});
-
+  const QrCheckScreen({super.key, required this.id});
+  final String id;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +36,7 @@ class QrCheckScreen extends StatelessWidget {
                     height: 25,
                   ),
                   QrImage(
-                    data: "ahmed waleed 12335458489",
+                    data: id,
                     version: QrVersions.auto,
                     size: 200.0,
                   ),
