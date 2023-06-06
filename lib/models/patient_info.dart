@@ -11,7 +11,7 @@ class Patient {
 
   void addPress(List<int> press, String date) {
     bloodPress[date] = press;
-  }
+}
 
   void deletePress(List<int> press, String date) {
     bloodPress.removeWhere((key, value) {
@@ -124,6 +124,7 @@ class MedicalVisit {
   final String date;
   final String note;
   final String docEmail;
+  final String imageURL;
   MedicalVisit({
     required this.docname,
     required this.place,
@@ -132,27 +133,33 @@ class MedicalVisit {
     required this.date,
     required this.note,
     required this.docEmail,
+    required this.imageURL,
   });
 
-  dynamic toJson() => {
+  dynamic toJson() {
+    return {
         'docname': docname,
         'docEmail': docEmail,
         'place': place,
         'diagnosis': diagnosis,
         'date': date,
         'note': note,
-        'drugs': drugs
+        'drugs': drugs,
+        'imgUrl': imageURL
       };
+  }
 
   factory MedicalVisit.fromJson(Map<String, dynamic> json) {
     return MedicalVisit(
-        docname: json['docname'],
-        docEmail: json['docEmail'],
-        place: json['place'],
-        diagnosis: json['diagnosis'],
-        date: json['date'],
-        note: json['note'],
-        drugs: json['drugs']);
+      docname: json['docname'],
+      docEmail: json['docEmail'],
+      place: json['place'],
+      diagnosis: json['diagnosis'],
+      date: json['date'],
+      note: json['note'],
+      drugs: json['drugs'],
+      imageURL: json['imgUrl'],
+    );
   }
 }
 

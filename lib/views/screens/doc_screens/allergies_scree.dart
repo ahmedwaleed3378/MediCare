@@ -18,33 +18,8 @@ class PatientAllergyView extends StatefulWidget {
 
 class _PatientAllergyViewState extends State<PatientAllergyView> {
   List<Allergies> allergies = [];
-
-  // Future<List<Allergies>> getAllergies() async {
-  //   final querySnapshot = await FirebaseFirestore.instance
-  //       .collection('Patients/${widget.email}/allergy')
-  //       .get();
-  //   List<QueryDocumentSnapshot> docs = querySnapshot.docs;
-  //   final allers = docs
-  //       .map((QueryDocumentSnapshot<Object?> doc) =>
-  //           Allergies.fromJson(doc.data() as Map<String, dynamic>))
-  //       .toList();
-
-  //   return allers;
-  // }
-
-  // void removeFut() async {
-  //   allergies = await getAllergies();
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   removeFut();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    //  print('\n    -----      ${allergies.length}       ------      \n');
 
     return MyScaffold(
       title: 'Allergy',

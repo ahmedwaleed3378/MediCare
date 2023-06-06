@@ -44,6 +44,7 @@ class PatientBloodGluView extends StatelessWidget {
                     const SizedBox(width: 15)
                   ],
                 ),
+                
                 Expanded(
                   child: ListView(
                       padding: const EdgeInsets.all(20),
